@@ -6,6 +6,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 import simpleaudio as sa
 import pygame
+import math
 
 class KarelPupper:
     def start():
@@ -62,30 +63,58 @@ class KarelPupper:
     def move_backward(self):
         ################################################################################################
         # TODO: Implement move_backward method
+        move_cmd = Twist()
+        move_cmd.linear.x = -1.0
+        move_cmd.angular.z = 0.0 
+        self.publisher.publish(move_cmd)
+        rclpy.spin_once(self.node, timeout_sec=1.0)
+        self.node.get_logger().info('Move backward...')
         ################################################################################################
         self.stop()
 
     def move_left(self):
         ################################################################################################
         # TODO: Implement move_left method
+        # turn left
+        self.turn_left()
+        self.move_forward()
         ################################################################################################
         self.stop()
     
     def move_right(self):
         ################################################################################################
         # TODO: Implement move_right method
+        self.turn_right()
+        self.move_forward()
         ################################################################################################
         self.stop()
     
     def turn_left(self):
         ################################################################################################
         # TODO: Implement turn_left method
+        move_cmd = Twist()
+        move_cmd.linear.x = 0.0
+        angular_speed = 0.8 
+        direction = 1
+        move_cmd.angular.z = direction * angular_speed
+        self.publisher.publish(move_cmd)
+        rclpy.spin_once(self.node, timeout_sec=0.01)
+        time.sleep(0.5 * math.pi / 0.8)      # turn 90 degrees by turning at 0.8 rad / s for ~1.96 seconds
         ################################################################################################
         self.stop()
 
     def turn_right(self):
         ################################################################################################
         # TODO: Implement turn_right method
+        move_cmd = Twist()
+        move_cmd.linear.x = 0.0
+        angular_speed = 0.8
+        
+        direction = -1
+        move_cmd.angular.z = direction * angular_speed
+        self.publisher.publish(move_cmd)
+        rclpy.spin_once(self.node, timeout_sec=0.01)  
+        time.sleep(0.5 * math.pi / 0.8)      
         ################################################################################################
         self.stop()
 
