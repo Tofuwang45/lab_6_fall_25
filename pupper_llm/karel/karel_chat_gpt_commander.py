@@ -405,7 +405,61 @@ class EnhancedGPTCommanderNode(Node):
             Don't worry about making this prompt too long - the TA version is 50 lines!
             """
             # Enhanced system prompt for better command recognition
-            system_prompt = """You are Pupper....... <complete the rest!>"""
+            engineered_prompt = """
+            Your job is to translate a user's natural language query into a *single*, *specific* Python function call from the KarelPupper API.
+
+            Your response MUST be ONLY the function call text and nothing else.
+            - Do not add any explanation.
+            - Do not add any greetings.
+            - Do not use markdown or code blocks.
+
+            The *only* valid keywords you can output are:
+            - `move`
+            - `left`
+            - `right`
+            - `wiggle`
+            - `dance`
+            - `bark`
+            - `stop`
+
+            If the user's query is ambiguous or does not map to one of these commands, you must output the string `None`.
+
+            Here are examples of the correct behavior:
+
+            User: Go forward
+            Assistant: `move`
+
+            User: I want you to move
+            Assistant: `move`
+
+            User: turn to the left
+            Assistant: `left`
+
+            User: turn to the right
+            Assistant: `right`
+
+            User: do a little dance
+            Assistant: `dance`
+
+            User: shake!
+            Assistant: `wiggle`
+
+            User: speak!
+            Assistant: `bark`
+
+            User: make some noise
+            Assistant: `bark`
+
+            User: halt
+            Assistant: `stop`
+
+            User: hello
+            Assistant: `stop`
+
+            User: what's your name?
+            Assistant: `stop`
+            """
+            system_prompt = f"""You are Pupper....... {engineered_prompt}"""
             
             messages = [{"role": "system", "content": system_prompt}] + self.conversation_history
             
@@ -544,6 +598,14 @@ class EnhancedGPTCommanderNode(Node):
             logger.info('Queueing command: Bark')
             # Bark plays audio, give it time to complete
             await self.add_command(KarelMethodCommand('bark', 'bark', duration=2.0))
+            return True
+        elif "turn_left" in command_text:
+            logger.info('Queueing command: Turn Left')
+            await self.add_command(KarelMethodCommand('turn_left', 'turn left', duration=1.5)) # Adjust duration as needed
+            return True
+        elif "turn_right" in command_text:
+            logger.info('Queueing command: Turn Right')
+            await self.add_command(KarelMethodCommand('turn_right', 'turn right', duration=1.5)) # Adjust duration as needed
             return True
         elif "stop" in command_text:
             logger.info('Queueing command: Stop')
