@@ -95,11 +95,11 @@ class KarelPupper:
         move_cmd = Twist()
         move_cmd.linear.x = 0.0
         angular_speed = 0.8 
-        direction = 1
+        direction = 0.5 * math.pi / 0.8
         move_cmd.angular.z = direction * angular_speed
         self.publisher.publish(move_cmd)
         rclpy.spin_once(self.node, timeout_sec=0.01)
-        time.sleep(0.5 * math.pi / 0.8)      # turn 90 degrees by turning at 0.8 rad / s for ~1.96 seconds
+        # time.sleep(0.5 * math.pi / 0.8)      # turn 90 degrees by turning at 0.8 rad / s for ~1.96 seconds
         ################################################################################################
         self.stop()
 
@@ -110,11 +110,11 @@ class KarelPupper:
         move_cmd.linear.x = 0.0
         angular_speed = 0.8
         
-        direction = -1
+        direction = -0.5 * math.pi / 0.8
         move_cmd.angular.z = direction * angular_speed
         self.publisher.publish(move_cmd)
         rclpy.spin_once(self.node, timeout_sec=0.01)  
-        time.sleep(0.5 * math.pi / 0.8)      
+        # time.sleep(0.5 * math.pi / 0.8)      
         ################################################################################################
         self.stop()
 
