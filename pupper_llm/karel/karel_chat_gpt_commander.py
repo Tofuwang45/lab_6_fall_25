@@ -406,7 +406,7 @@ class EnhancedGPTCommanderNode(Node):
             """
             # Enhanced system prompt for better command recognition
             engineered_prompt = """
-            Your job is to translate a user's natural language query into a *single*, *specific* Python function call from the KarelPupper API.
+            Your job is to translate a user's natural language query into a *single* keyword.
 
             Your response MUST be ONLY the function call text and nothing else.
             - Do not add any explanation.
